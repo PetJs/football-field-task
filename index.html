@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <!-- TO-DO -->
+    <!-- 
+        1. Implement a new ui for the ball and field.
+        2. Add one goalpost
+        3. Add a score feature to keep track of every time the ball is in the net area.
+    -->
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .field{
+            display: flex;
+            justify-content: center;
+            margin: 12px;
+            background-color: green;
+            width: 500px;
+            height:250px;
+            position: relative;
+        }
+        .center-line{
+            background-color: white;
+            rotate: 180deg;
+            width: 3px;
+        }
+        .center-circle{
+            position: absolute;
+            align-self: center;
+            border: 2px solid white ;
+            border-radius: 50%;
+            padding: 15%;
+        }
+        .post{
+            position: absolute;
+            align-self: center;
+            border: 2px solid white;
+            width: 32px;
+            height: 120px;
+            right: 0;
+        }
+        .ball{
+            align-self: center;
+            padding: 12px;
+            background-color: rgb(225, 224, 241);
+            z-index: 2;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin: 8px;
+            position: absolute;
+            /* Adds Animation of the ball Moving */
+            transition: left 0.4s ease, top 0.4s ease;
+        }
+
+        .center-ball {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+
+    <h2>Score: <span id="score">0</span></h2>   
+
+    <div class="field" id="field">
+        <hr class="center-line">
+        <div class="center-circle"></div>
+        <div class="post" id="post"></div>
+        <p class="ball center-ball" id="ball"></p>
+    </div>
+
+    <script>
+        const ball = document.getElementById("ball");
+        const post = document.getElementById("post");
+        const score = document.getElementById("score");
+
+        let count = 0;
+
+        field.onclick = function(event) {
+            // Remove center class to move the ball freely
+            ball.classList.remove("center-ball");
+
+            // GET POSITION OF FIELD
+            const fieldRect = field.getBoundingClientRect();
+
+            // Get Position of the Post
+            const postRect = post.getBoundingClientRect();
+
+            // Get Position of The Ball
+            const ballRect = ball.getBoundingClientRect();
+
+            // Get position relative to the field
+            const positionX = event.clientX - fieldRect.left;
+            const positionY = event.clientY - fieldRect.top;
+            
+            // SET POSITION OF THE BALL
+            ball.style.left = positionX - ball.offsetWidth / 2 + 'px';
+            ball.style.top = positionY - ball.offsetHeight / 2 + 'px';
+
+            const isInGoal =
+                ballRect.left < postRect.right &&
+                ballRect.right > postRect.left &&
+                ballRect.top < postRect.bottom &&
+                ballRect.bottom > postRect.top;
+
+            if (isInGoal) {
+                count++;
+                score.textContent = count;
+            }
+
+        }
+    </script>
+</body>
+</html>
